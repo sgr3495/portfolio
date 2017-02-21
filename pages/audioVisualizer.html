@@ -1,0 +1,71 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicomatic/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="../favicomatic/favicon-16x16.png" sizes="16x16" />
+
+  <title>Shawn Ribaudo</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="../js/jquery.desoslide.min.js"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/gallery.css">
+  <link rel="stylesheet" href="../css/animate.min.css">
+  <link rel="stylesheet" href="../css/jquery.desoslide.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="../index.html">Portfolio</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://drive.google.com/open?id=0Bwv9_USOmyLpOTdHSzlrS1JQZ2c">Resume</a></li>
+    </ul>
+  </nav>
+  <div class="page_header">
+    <div class="header_item">
+      <h1>Audio Visualizer</h1>
+      <span class="header_subtitle">Fall 2015</span>
+    </div>
+  </div>
+  <div class="page_body">
+    <div id="bodyStuff">
+      <!-- Special Thanks to http://sylouuu.github.io/desoslide/doc/demo.html -->
+      <!-- slideshow is where gallery display pictures -->
+      <div id="slideshow"></div>
+          <ul class="thumbnail">
+            <li> <a href="../image/audio/audio1.PNG"> <img src="../image/audio/audio1.PNG" alt="audio1"> </a> </li>
+            <li> <a href="../image/audio/audio2.PNG"> <img src="../image/audio/audio2.PNG" alt="audio2"> </a> </li>
+            <li> <a href="../image/audio/audio3.PNG"> <img src="../image/audio/audio3.PNG" alt="audio3"> </a> </li>
+            <li> <a href="../image/audio/audio4.PNG"> <img src="../image/audio/audio4.PNG" alt="audio4"> </a> </li>
+         </ul>
+         <!-- script for gallery slide function -->
+         <script src="../js/gallerySlideFunction.js"></script>
+      <div class="clear"></div>
+        <h3>Skill</h3>
+        <ul id="list">
+          <li>HTML</li>
+          <li>JavaScript</li>
+	  <li>Web Audio API</li>
+        </ul>
+        <h3>Project Description</h3>
+        <p>The audio visualizer is an interactive application. It is basically showing the sound wave based on the sound itself. This allows the user to interact by changing the color on canvas or adding creative sound waves. They also can add or remove the different kinds of readymade frequencies. It also includes three songs which are New Adventure Theme, Peanuts Theme, and The Picard Song.</p>
+        <h3>Project Timeline</h3>
+        <h4>Research</h4>
+        <p>This is a solo project. I admit that I don’t know how the sound wave was created. So, I decided to Google it to understand the frequency, pitch, and loudness. My ears don’t really pick up low bass. It was surprising for me to see that the sub bass frequencies include the harp and tuba.  I always thought those were high frequency sounds.</p>
+        <h4>Coding Time</h4>
+        <p>Web Audio API is a great tool for analyzing the sound which allows me to receive the sound data. Using the AnalyserNode gives me access to the frequency data of the sound.  I converted the data into a drawing on canvas. I also added a filter to make it more appealing by receiving each color pixel in canvas and manipulating the color. </p>
+        <h4>Conclusion</h4>
+        <p>It was fun to try new stuff using the audio on canvas. I would love to learn how to separate the specific instruments, that way I can try to copy DubsteGutter style. However, I realized that it would not be possible, but it would be possible if the sound was playing separately and then combine them all together to create one awesome drawing of wavelengths. This is something I would like to look back at in the future.</p>
+        <p><a href="../Portfolio/webAudio/webAudio.html">Play Audio Visualizer</a><p>
+    </div>
+  </div>
+</body>
+
+</html>

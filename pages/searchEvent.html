@@ -1,0 +1,68 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicomatic/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="../favicomatic/favicon-16x16.png" sizes="16x16" />
+
+  <title>Shawn Ribaudo</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="../js/jquery.desoslide.min.js"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/gallery.css">
+  <link rel="stylesheet" href="../css/animate.min.css">
+  <link rel="stylesheet" href="../css/jquery.desoslide.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="../index.html">Portfolio</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://drive.google.com/open?id=0Bwv9_USOmyLpOTdHSzlrS1JQZ2c">Resume</a></li>
+    </ul>
+  </nav>
+  <div class="page_header">
+    <div class="header_item">
+      <h1>DelVR</h1>
+      <span class="header_subtitle">Spring 2016</span>
+    </div>
+  </div>
+  <div class="page_body">
+    <div id="bodyStuff">
+      <!-- Special Thanks to http://sylouuu.github.io/desoslide/doc/demo.html -->
+      <!-- slideshow is where gallery display pictures -->
+      <div id="slideshow"></div>
+          <ul class="thumbnail">
+            <li> <a href="../image/searchEvent/searchEvent1.jpg"> <img src="../image/searchEvent/searchEvent1.jpg" alt="searchEvent Image1"> </a> </li>
+            <li> <a href="../image/searchEvent/searchEvent2.jpg"> <img src="../image/searchEvent/searchEvent2.jpg" alt="searchEvent Image2"> </a> </li>
+            <li> <a href="../image/searchEvent/searchEvent6.jpg"> <img src="../image/searchEvent/searchEvent6.jpg" alt="searchEvent Image6"> </a> </li>
+         </ul>
+         <!-- script for gallery slide function -->
+         <script src="../js/gallerySlideFunction.js"></script>
+      <div class="clear"></div>
+        <h3>Skill</h3>
+        <ul id="list">
+          <li>Swift</li>
+          <li>iOS8</li>
+        </ul>
+        <h3>Project Description</h3>
+        <p>Search Event is a small project that I made during class. It will display the events based on the location user put such as Rochester, Wichita and Chicago. Once the event is selected, the description of the event will appear and will have an option to add to favorite or view it on map. User will be able to delete favorite or rearrange the favorite events.</p>
+        <h4>Coding Time</h4>
+        <p>The goal was to use any kind of API. So, I decided to do event finder using <a href = "http://eventful.com">Eventful API</a>. I thought it was a good experience to use maps as a location for each event. Reading JSON file was hard at first because it was a new experience for me. However, it turned out to not be that difficult once I figured out how to receive a certain data such as name, location, date, time, and description. Then, I stored them in an array of Event which is stored in a global singleton model. With the global singleton model, it allowed me to send or update the data to another scene. Once I finished figuring out on receiving data, I was doing the search result base on the location since Eventful API provided events everywhere in the United States.</p>
+        <h4>Keep Going</h4>
+        <p>I decided to make it more interesting by doing a map. It was very challenging for me because I was struggling on zooming the map based on the location. It kept showing the world map. It was too hard for people to see the event base on the event they picked in a world map. The only way people can see it is to have a magnifying glass on the map to make it more visible; just kidding. I program it to zoom all the way until the certain range from the location, so that way people will be able to see the road map around it instead of seeing only the place without seeing any road map.</p>
+        <h4>Conclusion</h4>
+        <p>This project was an enjoyable project for me. There are so many things I want to learn about mobile. If I have more time, I will learn more about UISegmentedControl. I was planning to use that for search result for event base on time or distance and for map base on map types. I will try to make the search result display base on date or distance using UISegmentedControl.</p>
+        <p><a href="../Portfolio/SearchEvent.zip" download>Download the files</a><p>
+    </div>
+  </div>
+</body>
+
+</html>

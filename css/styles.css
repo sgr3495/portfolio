@@ -1,0 +1,158 @@
+.flex-container {
+  max-width: 1380px;
+  padding: 0;
+  margin: auto;
+  text-align: center;
+  list-style: none;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.flex-item {
+  padding: 5px;
+  width: 440px;
+  margin-top: 10px;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+}
+
+.flex-item img{
+  width: 100%;
+  height: 329px;
+}
+
+.flex-item h3{
+  color: #a6a6a6;
+}
+
+.flex-item:hover h3{
+  color: #5900b3;
+  border-color: #5900b3
+}
+
+.logo{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page_header{
+  padding:4%;
+  background: #5900b3;
+  color: white;
+}
+
+.page_body{
+  padding-top: 3%;
+  background: #e6e6e6;
+}
+
+#bodyStuff{
+  max-width: 800px;
+  margin: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 40px;
+}
+
+.header_item{
+  margin: auto;
+  text-align: center;
+}
+#list{
+  text-align: center;
+  padding: 0;
+}
+#list li{
+  display: inline;
+  padding: 10px;
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+  color: white;
+}
+
+a:link    { color: #5900b3 }  /* unvisited links */
+a:visited { color: #5900b3 }  /* visited links   */
+a:hover   { color: #a6a6a6 }  /* user hovers     */
+a:active  { color: #5900b3 }  /* active links    */
+
+
+nav{
+  padding: 20px;
+  background: #47008F;
+}
+
+nav a:link    { color: white }  /* unvisited links */
+nav a:visited { color: white }  /* visited links   */
+nav a:hover   { color: #d9b3ff }  /* user hovers     */
+nav a:active  { color: white }  /* active links    */
+
+nav ul{
+  list-style-type: none;
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+}
+
+nav li{
+  display:inline;
+  padding:2%;
+  font-size: 24px;
+}
+
+span{
+  text-transform: uppercase;
+  font-size: 30px;
+}
+
+body{
+  margin: 0;
+  color: black;
+  font-family: 'Oswald', sans-serif;
+  background-color: #e6e6e6;
+}
+
+h1{
+  font-size: 80px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+h3{
+  border-bottom: 1px solid;
+  border-color: #CCCCCC;
+  padding-bottom: 9px;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 36px;
+}
+
+footer{
+  background: #4d4d4d;
+  padding: 20px;
+}
+
+.footer_item{
+  max-width: 1380px;
+  margin: auto;
+}
+
+p{
+  margin-bottom: 0;
+}
+
+#formMail table{
+  margin: auto;
+}

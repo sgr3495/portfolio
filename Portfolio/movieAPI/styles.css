@@ -1,0 +1,165 @@
+	*{
+ 		font-family: 'Asap', sans-serif;
+ 	}
+	
+	body{
+		background-color: #424242;
+		width:800px;
+		margin: auto;
+	}
+ 	 	
+ 	#content{
+ 		margin-left: 5%;
+ 		margin-right:5%;
+ 		background-color:#FFF5EE;
+ 		min-height:500px;
+ 		padding:0 10px 10px 10px;
+ 		border:1px solid gray;
+ 	}
+ 	
+ 	#search{
+ 		box-shadow:inset 0px 1px 0px 0px #f7c5c0;
+ 		background:linear-gradient(to bottom, #6500cc 2%, #e5ccff 100%);
+ 		background-color:#6500cc;
+ 		border-radius:6px;
+ 		border:1px solid #6500cc;
+ 		display:inline-block;
+ 		cursor:pointer;
+ 		color:#ffffff;
+ 		font-size:15px;
+ 		font-weight:bold;
+ 		padding:6px 24px;
+ 		text-decoration:none;
+ 		text-shadow:0px 1px 0px #b23e35;
+ 		margin-right:2em;
+ 	}
+
+ 	
+ 	#search:hover {
+ 		background:linear-gradient(to bottom, #e5ccff 2%, #6500cc 100%);
+ 		background-color:#e5ccff;
+ 	}
+
+ 	
+ 	#search:active {
+ 		position:relative;
+ 		top:1px;
+ 	}
+
+ 	
+ 	#searchterm{
+ 		font-size:16px;
+ 	}
+	
+	#dynamicContent{
+	}
+	
+	.Item_Poster_Card{
+	background-color: #BDBDBD;
+	padding: 20px;
+	padding-bottom: 20px;
+	height:350px;
+	}
+	.Image_Content{
+	float:left;
+	padding-right: 20px;
+	}
+	
+	.Info{
+	padding: 800px;
+	}
+	
+	.trailer{
+		margin:auto;
+		text-align:center;
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-bottom : 20px;
+	}
+	#center{
+		text-align:center;
+	}
+	
+	#searchCenter{
+		margin:auto;
+		text-align:center;
+		padding-bottom : 1px;
+	}
+	
+	#leftCol{
+ 		float:left;
+		padding-right : 20px;
+		padding-left : 10px;
+ 	}
+ 	
+	#linkBar{
+		background-color: black;
+		padding:10px;
+		border: 2px solid;
+		border-bottom-right-radius:2em;
+		border-bottom-left-radius:2em;
+	}
+	
+	#leftLink:link{
+		text-decoration: none;
+		color:white;
+	}
+	
+	
+	#leftLink:visited{
+		color:white;
+		text-decoration: none;
+	}
+	
+	#leftLink:hover{
+		color:#d9d9d9;
+	}
+	
+	#leftLink:active{
+		color:#d9d9d9:
+	}
+	
+	#leftLink{
+		padding-left:25%;
+		
+	}
+	
+	#rightLink{
+		padding-left:25%;
+	}
+	
+	#rightLink:link{
+		text-decoration: none;
+		color:white;
+	}
+	
+	
+	#rightLink:visited{
+		color:white;
+		text-decoration: none;
+	}
+	
+	#rightLink:hover{
+		color:#d9d9d9;
+	}
+	
+	#rightLink:active{
+		color:#d9d9d9:
+	}
+	
+	#rightLink{
+		padding-left:25%;
+	}
+
+	#innerBody{
+		background-color: #BDBDBD;
+	}
+	
+	#mainCol{
+		padding-bottom : 10px;
+	}
+	
+	#resultBody{
+		min-height : 700px;
+	}
+	

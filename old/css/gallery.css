@@ -1,0 +1,17 @@
+.thumbnail{
+text-align: center;
+line-height:30px;
+padding: 0;
+}
+
+.thumbnail li{
+  display: inline;
+  padding: 10px;
+  list-style: none;
+}
+.thumbnail li a img{
+  width: 100px;
+}
+.clear{
+  clear:both;
+}

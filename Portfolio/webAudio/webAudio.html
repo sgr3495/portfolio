@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Web Audio Visualizer</title>
+	
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+	
+	<style>
+	body {
+		 width: 650px; 
+		 margin: 0 auto;
+         background: #d6d6d6;
+         font-family: 'Roboto Condensed', sans-serif;;
+      }
+
+      canvas {
+        margin-left:10px;
+        margin-top:10px;
+        box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        background: black;
+    }
+      
+      #controls{
+      	margin-left:10px;
+        margin-top:10px;
+      }
+	</style>
+	<script>
+	
+	(function(){
+		"use strict";
+		
+		var NUM_SAMPLES = 256;
+		var SOUND_1 = 'media/New Adventure Theme.mp3';
+		var SOUND_2 = 'media/Peanuts Theme.mp3';
+		var SOUND_3 = 'media/The Picard Song.mp3';
+		var audioElement;
+		var analyserNode;
+		var canvas,ctx;
+		var maxRadius = 70;
+		var oldPointX =0;
+		var oldPointY = 0;
+		var positiveData =0.0;
+		var negativeData  =0.0;
+		var redColor = 20;
+		var counter = 0.0;
+		
+		var invert = false, tintRed = false, noise = false, lines = false, blackWhite = false, blueCircle = false, pinkCircle = false, circleLine = false, waveLine = false; 
+		
+		function init(){
+			// set up canvas stuff
+			canvas = document.querySelector('canvas');
+			ctx = canvas.getContext("2d");
+			
+			// get reference to <audio> element on page
+			audioElement = document.querySelector('audio');
+			
+			// call our helper function and get an analyser node
+			analyserNode = createWebAudioContextWithAnalyserNode(audioElement);
+			
+			// get sound track <select> and Full Screen button working
+			setupUI();
+			
+			// load and play default sound into audio element
+			playStream(audioElement,SOUND_1);
+			
+			// start animation loop
+			update();
+			
+			//slider for circle size
+			document.querySelector("#valR").onchange = function(e){
+			document.querySelector("#sliderResults").innerHTML = e.target.value;
+			maxRadius = e.target.value;
+			}
+			
+			//slider for color red
+			document.querySelector("#colorR").onchange = function(e){
+			document.querySelector("#redResults").innerHTML = e.target.value;
+			redColor = e.target.value;
+			}
+			
+			//check box
+			//invert
+			document.getElementById('invertCheck').onchange = function(e){
+				if( e.target.checked){
+				 	invert = true;
+				}
+				else{
+					invert = false;
+				}
+			}
+			
+			//tintRed
+			document.getElementById('tintRedCheck').onchange = function(e){
+				if( e.target.checked){
+				 	tintRed = true;
+				}
+				else{
+					tintRed = false;
+				}
+			}
+			//noise
+			document.getElementById('noiseCheck').onchange = function(e){
+				if( e.target.checked){
+				 	noise = true;
+				}
+				else{
+					noise = false;
+				}
+			}
+			
+			//lines
+			document.getElementById('linesCheck').onchange = function(e){
+				if( e.target.checked){
+				 	lines = true;
+				}
+				else{
+					lines = false;
+				}
+			}
+			//black and white
+			document.getElementById('blackWhiteCheck').onchange = function(e){
+				if( e.target.checked){
+				 	blackWhite = true;
+				}
+				else{
+					blackWhite = false;
+				}
+			}
+			//blue circle bar
+			document.getElementById('blueCircleCheck').onchange = function(e){
+				if( e.target.checked){
+				 	blueCircle = true;
+				}
+				else{
+					blueCircle = false;
+				}
+			}
+			//pink circle bar
+			document.getElementById('pinkCircleCheck').onchange = function(e){
+				if( e.target.checked){
+				 	pinkCircle = true;
+				}
+				else{
+					pinkCircle = false;
+				}
+			}
+			//circle line
+			document.getElementById('circleLineCheck').onchange = function(e){
+				if( e.target.checked){
+				 	circleLine = true;
+				}
+				else{
+					circleLine = false;
+				}
+			}
+			//wave line
+			document.getElementById('waveLineCheck').onchange = function(e){
+				if( e.target.checked){
+				 	waveLine = true;
+				}
+				else{
+					waveLine = false;
+				}
+			}
+			
+		}
+		
+		
+		function createWebAudioContextWithAnalyserNode(audioElement) {
+			var audioCtx, analyserNode, sourceNode;
+			// create new AudioContext
+			// The || is because WebAudio has not been standardized across browsers yet
+			// http://webaudio.github.io/web-audio-api/#the-audiocontext-interface
+			audioCtx = new (window.AudioContext || window.webkitAudioContext);
+			
+			// create an analyser node
+			analyserNode = audioCtx.createAnalyser();
+			
+			
+			// fft stands for Fast Fourier Transform
+			analyserNode.fftSize = NUM_SAMPLES;
+			
+			// this is where we hook up the <audio> element to the analyserNode
+			sourceNode = audioCtx.createMediaElementSource(audioElement); 
+			sourceNode.connect(analyserNode);
+			
+			// here we connect to the destination i.e. speakers
+			analyserNode.connect(audioCtx.destination);
+			return analyserNode;
+		}
+		
+		function setupUI(){
+			document.querySelector("#trackSelect").onchange = function(e){
+				playStream(audioElement,e.target.value);
+			};
+			
+			document.querySelector("#fsButton").onclick = function(){
+				requestFullscreen(canvas);
+			};
+		}
+		
+		function playStream(audioElement,path){
+			audioElement.src = path;
+			audioElement.play();
+			audioElement.volume = 0.2;
+			document.querySelector('#status').innerHTML = "Now playing: " + path;
+		}
+		
+		function update() { 
+			// this schedules a call to the update() method in 1/60 seconds
+			requestAnimationFrame(update);
+			
+			/*
+				Nyquist Theorem
+				http://whatis.techtarget.com/definition/Nyquist-Theorem
+				The array of data we get back is 1/2 the size of the sample rate 
+			*/
+			
+			// create a new array of 8-bit integers (0-255)
+			var data = new Uint8Array(NUM_SAMPLES/2); 
+			
+			// populate the array with the frequency data
+			analyserNode.getByteFrequencyData(data);
+			
+			// DRAW!
+			ctx.clearRect(0,0,800,600);  
+			var barWidth = 4;
+			var barSpacing = 1;
+			var barHeight = 100;
+			var topSpacing = 50;
+			counter = 0
+			// loop through the data and draw!
+			for(var i=0; i<data.length; i++) { 
+			
+			var percent = data[i] / 255;  //alpha
+			
+			if (data[i] < 0){
+				positiveData = data[i] * -1;
+				console.log(positiveData);
+			}
+			
+			if (data[i] > 0){
+				negativeData = data[i] * -1;
+				//console.log(negativeData);
+			}
+				
+				//blue bar circle
+				if (blueCircle){
+					ctx.save();
+					ctx.beginPath();
+					var grd = ctx.createLinearGradient(0, 0, 0, 300);
+					grd.addColorStop(0,"blue");
+					grd.addColorStop(1,"white");
+					ctx.fillStyle = grd; //'rgba(0, 122, 220,' + percent +')'; 
+					ctx.translate(canvas.width/2,canvas.height/2);
+					ctx.scale(percent*2, percent*2);
+					ctx.rotate(counter);
+					ctx.fillRect(0,topSpacing + 256-data[i],barWidth,barHeight*(-1)); 
+					ctx.stroke();
+					ctx.closePath();
+					ctx.restore();
+				}
+				
+				//white line
+				if (waveLine){
+					ctx.save();
+					ctx.strokeStyle = "white";
+					ctx.beginPath();
+					ctx.moveTo((i-1) * (barWidth + barSpacing),topSpacing + 256-data[i-1]);
+					ctx.lineTo(i * (barWidth + barSpacing),topSpacing + 256-data[i]);
+					ctx.stroke();
+					ctx.closePath();
+					ctx.restore();
+				}
+				
+				//pink bar circle
+				if (pinkCircle){
+					ctx.save();
+					ctx.translate(canvas.width/2,canvas.height/2);
+					ctx.rotate(counter * -1);
+					
+					ctx.beginPath();
+					ctx.strokeStyle = 'rgba(255,154, 220,' + percent *2 +')';
+					ctx.moveTo(0,150);
+					ctx.lineTo(0,(256-data[i]));
+					
+					ctx.stroke();
+					ctx.closePath();
+					ctx.restore();
+				}
+				
+				//counter for rotation
+				counter = counter + (((255/360)*Math.PI/180)*4);
+				
+				//circle line
+				if (circleLine){
+					
+					ctx.save();
+					ctx.beginPath();
+					ctx.fillStyle = makeColor(Math.floor((Math.random() * 255) + 1), Math.floor((Math.random() * 255) + 1), Math.floor((Math.random() * 10) + 1),.3);
+					ctx.arc(canvas.width * ((i/255)*2), topSpacing + 256-data[i], circleRadius * .20, 0, 2 * Math.PI, false);
+					ctx.fill();
+					ctx.closePath();
+					ctx.restore();
+					
+					//inverse circle
+					ctx.save();
+					ctx.beginPath();
+					ctx.fillStyle = makeColor(Math.floor((Math.random() * 255) + 1), Math.floor((Math.random() * 255) + 1), Math.floor((Math.random() * 10) + 1),.3);
+					ctx.arc(640-(canvas.width * ((i/255)*2)), topSpacing + 256-data[i], circleRadius * .20, 0, 2 * Math.PI, false);
+					ctx.fill();
+					ctx.closePath();
+					ctx.restore();
+					
+					//////////// FLIP
+					ctx.save();
+					ctx.beginPath();
+					ctx.fillStyle = makeColor(200, 200, Math.floor((Math.random() * 255) + 1),.3);
+					ctx.arc(canvas.width * ((i/255)*2), canvas.height - (topSpacing + 256-data[i]), circleRadius * .20, 0, 2 * Math.PI, false);
+					ctx.fill();
+					ctx.closePath();
+					ctx.restore();
+					
+					//inverse circle
+					ctx.save();
+					ctx.beginPath();
+					ctx.fillStyle = makeColor(200, 200, Math.floor((Math.random() * 255) + 1),.3);
+					ctx.arc(640-(canvas.width * ((i/255)*2)), canvas.height - (topSpacing + 256-data[i]), circleRadius * .20, 0, 2 * Math.PI, false);
+					ctx.fill();
+					ctx.closePath();
+					ctx.restore();
+					
+					//circle line end
+				}
+				    
+				//circle Radius
+				var circleRadius = percent * maxRadius;
+
+				// green-ish circles, smaller
+				ctx.save();
+				ctx.beginPath();
+				ctx.fillStyle = makeColor(redColor, 200, 0, .5 - percent/5.0);
+				ctx.arc(canvas.width/2, canvas.height/2, circleRadius * .50, 0, 2 * Math.PI, false);
+				ctx.fill();
+				ctx.closePath();
+				ctx.restore();
+				
+				
+
+				
+			}
+			
+			manipulatePixels();
+			 
+		} 
+		
+		// HELPER
+		function makeColor(red, green, blue, alpha){
+   			var color='rgba('+red+','+green+','+blue+', '+alpha+')';
+   			return color;
+		}
+		
+		 // FULL SCREEN MODE
+		function requestFullscreen(element) {
+			if (element.requestFullscreen) {
+			  element.requestFullscreen();
+			} else if (element.mozRequestFullscreen) {
+			  element.mozRequestFullscreen();
+			} else if (element.mozRequestFullScreen) { // camel-cased 'S' was changed to 's' in spec
+			  element.mozRequestFullScreen();
+			} else if (element.webkitRequestFullscreen) {
+			  element.webkitRequestFullscreen();
+			}
+			// .. and do nothing if the method is not supported
+		};
+		
+		function manipulatePixels(){  
+		// i) Get all of the rgba pixel data of the canvas by grabbing the    
+		var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);    
+		// ii) imageData.data is an 8-bit typed array - values range from 0-255  
+		var data = imageData.data;  
+		var length = data.length;  
+		var width = imageData.width;    
+		// iii) Iterate through each pixel  
+		for (var i = 0; i < length; i +=4){   
+		// iv) increase red value only   
+			if(tintRed){   
+				// just the red channel   
+				data[i] = data[i] + 100;   
+			} 
+			// v) invert every color channel 
+			if(invert){  
+			var red = data[i], green = data[i+1], blue = data[i+2];
+			data[i] = 255 - red;   // set red value  
+			data[i+1] = 255 - green;   // set blue value  
+			data[i+2] = 255 - blue; // set green value 
+			} 
+			// vi) noise 
+			if  (noise && Math.random() < .10){  
+			data[i] = data[i +1] = data[i+2] = 128; // gray noise    
+			}
+			// vii) draw 2-pixel lines every 50 rows
+			if (lines){  
+				var row = Math.floor(i/4/width);  
+				if (row % 50  == 0){  
+					// this row   
+					data[i] = data[i +1] = data[i+2] = data[i+3] = 255;  
+				
+					// next row
+					data[i+ (width*4)] = data[i +(width*4) + 1] = data[i + (width*4) +2] = data[i + (width*4) +3] = 255; 
+				}   
+			}
+
+			//black and white
+			if (blackWhite){
+				var r = data[i], g = data[i+1], b = data[i+2], gray = (r+g+b)/3;
+				data[i] = gray;
+				data[i+1] = gray;
+				data[i+2] = gray;
+
+			}
+
+		}    
+		// put the modified data back on the canvas  
+		ctx.putImageData(imageData, 0, 0);  
+		}
+		
+		window.addEventListener("load",init);
+	}());
+		
+	</script>
+</head>
+<body>
+	<canvas id="canvas" width="640" height="400"></canvas>
+	<div id="controls">
+		<audio controls loop></audio>
+		<label>Track: 
+			<select id="trackSelect" >
+				<option value="media/New Adventure Theme.mp3">New Adventure Theme</option>
+				<option value="media/Peanuts Theme.mp3">Peanuts Theme</option>
+				<option value="media/The Picard Song.mp3">The Picard Song</option>
+			</select>
+		</label>
+		<button id="fsButton">Go Full Screen</button><br>
+		<p id="status">???</p>
+
+		<h3> Filter </h3>
+		<label for="myCheckbox">Invert</label> 
+			<input type="checkbox" id="invertCheck">
+		<label for="myCheckbox">| Tint Red</label> 
+			<input type="checkbox" id="tintRedCheck">
+		<label for="myCheckbox">| Noise</label>
+			<input type="checkbox" id="noiseCheck">
+		<label for="myCheckbox">| Lines</label>
+			<input type="checkbox" id="linesCheck">
+		<label for="myCheckbox">| Black and White</label>
+			<input type="checkbox" id="blackWhiteCheck">
+			
+		<h3> Customized the Visualizer </h3>	
+		<span>Max Circle Size: </span>
+		<input id="valR" type="range" min="1" max="255" value="70" step="1" />
+		<span id="sliderResults">70</span>
+		<p></p>
+		<span>Change the red value of the circle: </span>
+		<input id="colorR" type="range" min="1" max="255" value="20" step="1" />
+		<span id="redResults">20</span>
+		<p></p>
+		<label for="myCheckbox">Blue circle bar</label>
+			<input type="checkbox" id="blueCircleCheck">
+		<label for="myCheckbox">| Pink circle bar</label>
+			<input type="checkbox" id="pinkCircleCheck">
+		<label for="myCheckbox">| Circle line</label>
+			<input type="checkbox" id="circleLineCheck">
+		<label for="myCheckbox">| Wave line</label>
+			<input type="checkbox" id="waveLineCheck">
+		
+
+	</div>
+</body>
+</html>
